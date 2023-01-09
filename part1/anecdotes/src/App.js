@@ -31,13 +31,7 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState([])
   const[maxIndex,setIndex] = useState(0)
- 
 
- 
-  
-  
-
-  
   return (
     <div>
       <p>{anecdotes[selected]}</p>
