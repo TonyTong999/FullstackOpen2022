@@ -10,7 +10,7 @@ const StatisticLine = (props) => {
  return(
   <tr>
   <td>{text}</td> 
-  <td>{stat} {percent}</td>
+  <td> {stat} {percent}</td>
   </tr>
  )
 }
