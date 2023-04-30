@@ -1,14 +1,12 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
+import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/personService'
+
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
@@ -28,14 +26,32 @@ const App = () => {
       number: newNumber,
     }
     if (persons.findIndex((element) => element.name === newName) === -1) {
-      setPersons(persons.concat(newPerson))
-      setNewName('')
+      personService
+      .create(newPerson)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+    
     }
     else {
       alert(`${newName} is already added to phonebook`);
     }
 
   }
+  useEffect(() => {
+    console.log('effect')
+    personService
+      .getAll()
+      .then(initialPersons => {
+        console.log('promise fulfilled')
+        setPersons(initialPersons)
+      })
+  }, [])
+
+
+  console.log('render', persons.length, 'persons')
   const personToShow = persons.filter(person => person.name.toUpperCase().includes(searchName.toUpperCase()))
   return (
     <div>
@@ -54,7 +70,9 @@ const App = () => {
       />
       <h2>Numbers</h2>
       <Persons
-        personToShow={personToShow} />
+        personToShow={personToShow}
+        setPersons={setPersons}
+        />
     </div>
   )
 }
