@@ -4,14 +4,18 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/personService'
+import Notification from './components/Notification'  
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
+  const [notification,setNotification] = useState('')
   const handleNameChange = (event) => {
     setNewName(event.target.value)
+    setNotification(event.target.value)
   }
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
@@ -32,6 +36,8 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        setNotification(`${newName} is added to the phonebook.`)
+        setTimeout(()=>{setNotification(null)},5000)
       })
     
     }
@@ -48,6 +54,8 @@ const App = () => {
           setPersons(updatedPersons)
           setNewName('')
           setNewNumber('')
+          setNotification(`${newName} is updated with a new number ${newNumber}.`)
+          setTimeout(()=>{setNotification(null)},5000)
         })
       }   
     }
@@ -69,6 +77,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification}/>
       <Filter
         searchName={searchName}
         handleSearchChange={handleSearchChange}
