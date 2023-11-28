@@ -57,6 +57,9 @@ const App = () => {
           setNotification(`${newName} is updated with a new number ${newNumber}.`)
           setTimeout(()=>{setNotification(null)},5000)
         })
+        .catch(error =>{
+          setNotification(`${newName} is already removed from server.`)
+        })
       }   
     }
 
