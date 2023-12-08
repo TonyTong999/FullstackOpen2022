@@ -4,8 +4,14 @@ import countryServices from './services/countryServices.js'
 const App = () => {
   const [countries, setCountries] = useState([])
   const [searchName, setSearchName] = useState('')
+  const [selectedCountry, setSelectedCountry] = useState(null);
+
   const handleSearchChange = (event) => {
     setSearchName(event.target.value)
+  }
+
+  const handleShowClick = (country) => {
+    setSelectedCountry(country);
   }
 
 
@@ -19,6 +25,7 @@ const App = () => {
       })
   }, [])
   const countriesToShow = countries.filter(country => country.name.common.toUpperCase().includes(searchName.toUpperCase()))
+  console.log('render', countries.length, 'countries.length')
   console.log('render', countriesToShow.length, 'countriesToShow.length')
   return (
     <div>
@@ -46,11 +53,28 @@ const App = () => {
               <ul>
                 {
                   countriesToShow.map((country, i) =>
-                    <li key={country.name.common}>{country.name.common}</li>)
+                    <li key={country.name.common}>{country.name.common}
+                      <button onClick={() => handleShowClick(country)}>show</button>
+                    </li>)
                 }
-              </ul> :
+              </ul>
+              :
               <p>Too many matches, specify another filter</p>)
       }
+      {selectedCountry && (
+        <div>
+          <h2>{selectedCountry.name.common}</h2>
+          <p>Area: {selectedCountry.area}</p>
+          <p>Capital: {selectedCountry.capital}</p>
+          <img src={selectedCountry.flags.png} alt={selectedCountry.flags.alt} />
+          <h3>Languages:</h3>
+          <ul>
+            {Object.entries(selectedCountry.languages).map(([code, language]) => (
+              <li key={code}>{language}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
 
     </div>
