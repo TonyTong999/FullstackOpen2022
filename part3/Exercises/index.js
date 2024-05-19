@@ -1,7 +1,17 @@
 const express = require('express')
+const morgan = require('morgan')
+
 const app = express()
 
+// Define a custom token for Morgan to log request body
+morgan.token('req-body', (req, res) => {
+  return JSON.stringify(req.body);
+});
+
 app.use(express.json())
+app.use(morgan(':method :url - :req-body'));
+
+
 const PORT = 3001
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
