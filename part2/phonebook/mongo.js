@@ -24,7 +24,7 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-
+if(name && number){
 const person = new Person({
     name: name,
     number: number,
@@ -34,3 +34,13 @@ const person = new Person({
     console.log(`added ${name} ${number} to phonebook!`)
     mongoose.connection.close()
   })
+}
+else{
+  return Person.find({}).then(persons => {
+    console.log('phonebook:');
+    persons.forEach(person => {
+      console.log(`${person.name} ${person.number}`);
+    });
+    mongoose.connection.close();
+});
+}
